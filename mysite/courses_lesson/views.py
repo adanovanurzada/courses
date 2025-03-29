@@ -4,6 +4,9 @@ from rest_framework import viewsets
 from .filters import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from .pagination import CoursesPagination, ReviewPagination
+from .permissions import CheckOwner, CheckUserReview, CheckCourseOwner
+from rest_framework import permissions
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -38,12 +41,15 @@ class CoursesViewSet(viewsets.ModelViewSet):
     filterset_class = CoursesFilter
     search_fields = ['course_name']
     ordering_fields = ['price']
+    pagination_class = CoursesPagination
+    permission_classes = [CheckOwner, CheckCourseOwner]
 
 
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -78,4 +84,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     filterset_class = ReviewFilter
     search_fields = ['user']
     ordering_fields = ['rating']
+    pagination_class = ReviewPagination
+    permission_classes = [CheckOwner, CheckUserReview]
 

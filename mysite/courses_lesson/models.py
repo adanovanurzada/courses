@@ -59,10 +59,10 @@ class Courses(models.Model):
 
 
 class Lesson(models.Model):
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lesson_course')
     name_lesson = models.CharField(max_length=32)
     video_url = models.URLField()
     content = models.TextField(null=True, blank=True)
-    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name='lesson_course')
 
     def __str__(self):
         return self.name_lesson
